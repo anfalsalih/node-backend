@@ -1,0 +1,17 @@
+{
+  "name": "node-backend",
+  "version": "1.0.0",
+  "description": "A simple backend with Vanilla Node.js (CRUD using array)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "nodejs",
+    "vanilla",
+    "crud",
+    "backend"
+  ],
+  "author": "",
+  "license": "ISC"
+}
