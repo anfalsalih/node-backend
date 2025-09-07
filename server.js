@@ -1,51 +1,48 @@
-const http = require("http");
+const express = require('express');
+const app = express();
+const PORT = 3000;
 
-let items = [];   
-let id = 1;      
+app.use(express.json());
 
-const server = http.createServer((req, res) => {
-  res.setHeader("Content-Type", "application/json");
+let products = [];
+let idCounter = 1;
 
-  if (req.method === "POST" && req.url === "/create") {
-    let body = "";
-    req.on("data", chunk => body += chunk);
-    req.on("end", () => {
-      let data = JSON.parse(body);  
-      let newItem = { id: id, name: data.name };
-      id++;
-      items.push(newItem);
-      res.end(JSON.stringify(newItem));
-    });
-
-  } else if (req.method === "GET" && req.url === "/items") {
-    res.end(JSON.stringify(items));
-
-
-} else if (req.method === "PUT" && req.url.startsWith("/update/")) {
-    let itemId = parseInt(req.url.split("/")[2]);
-    let body = "";
-    req.on("data", chunk => body += chunk);
-    req.on("end", () => {
-      let data = JSON.parse(body);
-      let item = items.find(i => i.id === itemId);
-      if (item) {
-        item.name = data.name;   
-        res.end(JSON.stringify(item));
-      } else {
-        res.end(JSON.stringify({ error: "Item not found" }));
-      }
-    });
-
-  } else if (req.method === "DELETE" && req.url.startsWith("/delete/")) {
-    let itemId = parseInt(req.url.split("/")[2]);
-    items = items.filter(i => i.id !== itemId);
-    res.end(JSON.stringify({ message: "Item deleted" }));
-
-  } else {
-    res.end(JSON.stringify({ error: "Not found" }));
-  }
+app.get('/products', (req, res) => {
+res.status(200).json(products);
 });
 
-server.listen(3000, () => {
-  console.log("Server running at http://localhost:3000");
+
+
+app.post('/products', (req, res) => {
+const { name, price } = req.body;
+
+if (!name || price === undefined) {
+    return res.status(400).json({ error: "اسم المنتج والسعر مطلوبان." });
+}
+
+  const newProduct = {
+    id: idCounter++,
+    name,
+    price
+  };
+
+  products.push(newProduct);
+
+  res.status(201).json(newProduct);
+});
+
+
+app.delete('/products/:id', (req, res) => {
+  const productId = parseInt(req.params.id);
+  const productIndex = products.findIndex(p => p.id === productId);
+  if (productIndex === -1) {
+    return res.status(404).json({ error: "المنتج غير موجود." });
+  }
+
+  products.splice(productIndex, 1);
+  res.status(200).json({ message: "تم حذف المنتج بنجاح." });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -1,5 +1,5 @@
 {
-  "name": "node-backend",
+  "name": "backend",
   "version": "1.0.0",
   "description": "A simple backend with Vanilla Node.js (CRUD using array)",
   "main": "server.js",
@@ -13,5 +13,18 @@
     "backend"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anfalsalih/node-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/anfalsalih/node-backend/issues"
+  },
+  "homepage": "https://github.com/anfalsalih/node-backend#readme"
 }
